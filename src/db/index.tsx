@@ -45,3 +45,45 @@ export const initTable = async (db: SQLiteDatabase) => {
     }
   }
 };
+
+// === TOGGLE BOUGHT ===
+export const toggleBought = async (db: SQLiteDatabase, id: number) => {
+  await db.runAsync(
+    `UPDATE grocery_items SET bought = NOT bought WHERE id = ?`,
+    [id]
+  );
+};
+
+// === GET ALL (có thể lọc theo bought) ===
+export const getAllGroceries = async (
+  db: SQLiteDatabase,
+  filter?: { bought?: boolean }
+): Promise<Grocery[]> => {
+  let query = `SELECT * FROM grocery_items`;
+  const params: any[] = [];
+
+  if (filter?.bought !== undefined) {
+    query += ` WHERE bought = ?`;
+    params.push(filter.bought ? 1 : 0);
+  }
+
+  query += ` ORDER BY created_at DESC`;
+
+  return await db.getAllAsync<Grocery>(query, params);
+};
+
+// === GET BY ID ===
+export const getGroceryById = async (
+  db: SQLiteDatabase,
+  id: number
+): Promise<Grocery | null> => {
+  return await db.getFirstAsync<Grocery>(
+    `SELECT * FROM grocery_items WHERE id = ?`,
+    [id]
+  );
+};
+
+// === DELETE (hard delete) ===
+export const deleteGrocery = async (db: SQLiteDatabase, id: number) => {
+  await db.runAsync(`DELETE FROM grocery_items WHERE id = ?`, [id]);
+};

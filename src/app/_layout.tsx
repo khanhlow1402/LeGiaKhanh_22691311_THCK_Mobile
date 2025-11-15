@@ -11,7 +11,10 @@ export default function Layout() {
       <SafeAreaProvider>
         <SafeAreaView className="flex flex-1">
           <Text className="text-3xl font-bold text-center">Grocery App</Text>
-          <Stack screenOptions={{ headerShown: false }} />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index"></Stack.Screen>
+            <Stack.Screen name="(tabs)"></Stack.Screen>
+          </Stack>
         </SafeAreaView>
       </SafeAreaProvider>
     </SQLiteProvider>
